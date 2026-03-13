@@ -57,7 +57,7 @@ include 'data/skills.php';
                 </p>
 
                 <div class="about-info">
-                    <div class="info-item"><span>Name</span>Mohammad</div>
+                    <div class="info-item"><span>Name</span>Mohammad Al-Essa Jamilon</div>
                     <div class="info-item"><span>Location</span>Zamboanga City, Philippines</div>
                     <div class="info-item"><span>Email</span>jamilon.mohammad@gmail.com</div>
                     <div class="info-item"><span>Availability</span>Open to work ✅</div>
@@ -67,7 +67,7 @@ include 'data/skills.php';
 
                 <div style="display:flex;gap:1rem;flex-wrap:wrap;">
                     <a href="contact.php" class="btn btn-primary">Hire Me</a>
-                    <a href="assets/resume.pdf" download class="btn btn-outline">Download CV</a>
+                    <a href="assets/resume.html" target="_blank" class="btn btn-outline">View / Download CV</a>
                 </div>
             </div>
 
