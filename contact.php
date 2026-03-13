@@ -1,29 +1,7 @@
 <?php
 // contact.php
 $pageTitle = "Contact";
-
-// ── PHP Form Handling ──
-$success = $errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name    = trim($_POST['name']    ?? '');
-    $email   = trim($_POST['email']   ?? '');
-    $subject = trim($_POST['subject'] ?? '');
-    $message = trim($_POST['message'] ?? '');
-
-    // Validation
-    if (empty($name))                         $errors['name']    = 'Your name is required.';
-    if (empty($email))                        $errors['email']   = 'Your email is required.';
-    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Please enter a valid email address.';
-    if (empty($subject))                      $errors['subject'] = 'A subject is required.';
-    if (strlen($message) < 10)               $errors['message'] = 'Message must be at least 10 characters.';
-
-    if (empty($errors)) {
-        // In production: use mail() or a library like PHPMailer
-        // mail('you@example.com', $subject, $message, "From: $name <$email>");
-        $success = true;
-    }
-}
+$success   = isset($_GET['success']) && $_GET['success'] === '1';
 
 include 'includes/header.php';
 include 'includes/navbar.php';
@@ -95,11 +73,26 @@ include 'includes/breadcrumbs.php';
 
                     <?php if ($success): ?>
                     <div class="form-feedback success">
-                        &#10003; Thank you, <?php echo htmlspecialchars($name); ?>! Your message has been sent. I'll be in touch soon.
+                        &#10003; Your message has been sent! I'll be in touch soon.
                     </div>
                     <?php endif; ?>
 
-                    <form id="contactForm" method="POST" action="contact.php" novalidate>
+                    <!--
+                        Web3Forms: free email service — no server config needed.
+                        Get your free access key at https://web3forms.com
+                        then replace YOUR_ACCESS_KEY_HERE below.
+                    -->
+                    <form id="contactForm"
+                          method="POST"
+                          action="https://api.web3forms.com/submit"
+                          novalidate>
+
+                        <!-- Web3Forms hidden fields -->
+                        <input type="hidden" name="access_key" value="619dd36f-288c-421d-a86b-df536eef3404">
+                        <input type="hidden" name="subject" value="New message from your Portfolio">
+                        <input type="hidden" name="from_name" value="Portfolio Contact Form">
+                        <input type="hidden" name="redirect" value="contact.php?success=1">
+                        <input type="checkbox" name="botcheck" style="display:none;">
 
                         <div class="form-row">
                             <div class="form-group">
@@ -107,12 +100,8 @@ include 'includes/breadcrumbs.php';
                                 <input type="text"
                                        id="name" name="name"
                                        placeholder="John Doe"
-                                       value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>"
                                        data-required data-label="Full Name"
-                                       autocomplete="name">
-                                <?php if (!empty($errors['name'])): ?>
-                                <div class="form-field-error"><?php echo htmlspecialchars($errors['name']); ?></div>
-                                <?php endif; ?>
+                                       autocomplete="name" required>
                                 <div class="form-field-error" data-error="name"></div>
                             </div>
                             <div class="form-group">
@@ -120,41 +109,31 @@ include 'includes/breadcrumbs.php';
                                 <input type="email"
                                        id="email" name="email"
                                        placeholder="john@example.com"
-                                       value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
                                        data-required data-label="Email Address"
-                                       autocomplete="email">
-                                <?php if (!empty($errors['email'])): ?>
-                                <div class="form-field-error"><?php echo htmlspecialchars($errors['email']); ?></div>
-                                <?php endif; ?>
+                                       autocomplete="email" required>
                                 <div class="form-field-error" data-error="email"></div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="subject">Subject *</label>
+                            <label for="subject_field">Subject *</label>
                             <input type="text"
-                                   id="subject" name="subject"
+                                   id="subject_field" name="subject_field"
                                    placeholder="Project Inquiry / Freelance Work"
-                                   value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>"
-                                   data-required data-label="Subject">
-                            <?php if (!empty($errors['subject'])): ?>
-                            <div class="form-field-error"><?php echo htmlspecialchars($errors['subject']); ?></div>
-                            <?php endif; ?>
-                            <div class="form-field-error" data-error="subject"></div>
+                                   data-required data-label="Subject" required>
+                            <div class="form-field-error" data-error="subject_field"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="message">Message *</label>
                             <textarea id="message" name="message"
                                       placeholder="Tell me about your project, timeline, and budget..."
-                                      data-required data-label="Message"><?php echo htmlspecialchars($_POST['message'] ?? ''); ?></textarea>
-                            <?php if (!empty($errors['message'])): ?>
-                            <div class="form-field-error"><?php echo htmlspecialchars($errors['message']); ?></div>
-                            <?php endif; ?>
+                                      data-required data-label="Message"
+                                      required></textarea>
                             <div class="form-field-error" data-error="message"></div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+                        <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%;justify-content:center;">
                             Send Message &#8594;
                         </button>
 
