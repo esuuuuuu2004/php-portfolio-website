@@ -4,10 +4,13 @@
    1. Dark / Light Mode Toggle
    ================================================ */
 (function initTheme() {
-    const root    = document.documentElement;
-    const btn     = document.getElementById('themeToggle');
-    const icon    = btn ? btn.querySelector('.theme-icon') : null;
-    const saved   = localStorage.getItem('theme') || 'light';
+    const root = document.documentElement;
+    const btn  = document.getElementById('themeToggle');
+    const icon = btn ? btn.querySelector('.theme-icon') : null;
+
+    // localStorage may be blocked by browser tracking prevention — fail gracefully
+    let saved = 'light';
+    try { saved = localStorage.getItem('theme') || 'light'; } catch (_) {}
 
     root.setAttribute('data-theme', saved);
     if (icon) icon.textContent = saved === 'dark' ? '☀️' : '🌙';
@@ -17,7 +20,7 @@
             const current = root.getAttribute('data-theme');
             const next    = current === 'dark' ? 'light' : 'dark';
             root.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
+            try { localStorage.setItem('theme', next); } catch (_) {}
             if (icon) icon.textContent = next === 'dark' ? '☀️' : '🌙';
         });
     }
@@ -218,33 +221,125 @@
 
 
 /* ================================================
-   7. Project Modal
+   7. Project Modal — multi-image carousel
    ================================================ */
 (function initModal() {
-    const overlay = document.getElementById('projectModal');
+    const overlay  = document.getElementById('projectModal');
     if (!overlay) return;
 
-    const closeBtn   = overlay.querySelector('.modal-close');
-    const modalImg   = overlay.querySelector('#modalImg');
-    const modalTitle = overlay.querySelector('#modalTitle');
-    const modalDesc  = overlay.querySelector('#modalDesc');
-    const modalTags  = overlay.querySelector('#modalTags');
-    const modalLink  = overlay.querySelector('#modalLink');
-    const modalDemo  = overlay.querySelector('#modalDemo');
+    const closeBtn    = overlay.querySelector('.modal-close');
+    const imgCarousel = overlay.querySelector('#modalImgCarousel');
+    const modalTitle  = overlay.querySelector('#modalTitle');
+    const modalDesc   = overlay.querySelector('#modalDesc');
+    const modalTags   = overlay.querySelector('#modalTags');
+    const modalRole   = overlay.querySelector('#modalRole');
+    const modalLink   = overlay.querySelector('#modalLink');
 
-    const open = data => {
-        if (modalImg)   { modalImg.src = data.image; modalImg.alt = data.title; }
-        if (modalTitle) modalTitle.textContent = data.title;
-        if (modalDesc)  modalDesc.textContent  = data.description;
-        if (modalTags && data.tags) {
-            modalTags.innerHTML = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    /* ── Build image carousel inside modal ── */
+    function buildImgCarousel(images, title) {
+        if (!imgCarousel) return;
+        imgCarousel.innerHTML = '';
+
+        if (!images || images.length === 0) {
+            imgCarousel.innerHTML = '<div class="modal-img-empty">🖼️</div>';
+            return;
         }
-        if (modalLink) { modalLink.href = data.link; }
-        if (modalDemo) { modalDemo.href = data.demo || '#'; }
+
+        const track = document.createElement('div');
+        track.className = 'modal-img-track';
+        images.forEach(src => {
+            const slide = document.createElement('div');
+            slide.className = 'modal-img-slide';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = title;
+            slide.appendChild(img);
+            track.appendChild(slide);
+        });
+        imgCarousel.appendChild(track);
+
+        if (images.length === 1) return; // no controls needed for single image
+
+        // Counter label
+        const counter = document.createElement('div');
+        counter.className = 'modal-img-counter';
+        imgCarousel.appendChild(counter);
+
+        // Arrow buttons
+        const prev = document.createElement('button');
+        prev.className = 'modal-img-arrow prev';
+        prev.setAttribute('aria-label', 'Previous image');
+        prev.innerHTML = '&#8592;';
+
+        const next = document.createElement('button');
+        next.className = 'modal-img-arrow next';
+        next.setAttribute('aria-label', 'Next image');
+        next.innerHTML = '&#8594;';
+        imgCarousel.appendChild(prev);
+        imgCarousel.appendChild(next);
+
+        // Dot indicators
+        const dotsWrap = document.createElement('div');
+        dotsWrap.className = 'modal-img-dots';
+        images.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'modal-img-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Image ${i + 1}`);
+            dotsWrap.appendChild(dot);
+        });
+        imgCarousel.appendChild(dotsWrap);
+
+        const dots = dotsWrap.querySelectorAll('.modal-img-dot');
+        let current = 0;
+
+        function goTo(idx) {
+            current = (idx + images.length) % images.length;
+            track.style.transform = `translateX(-${current * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+            counter.textContent = `${current + 1} / ${images.length}`;
+        }
+
+        dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+        prev.addEventListener('click', () => goTo(current - 1));
+        next.addEventListener('click', () => goTo(current + 1));
+
+        // Touch swipe support
+        let touchStartX = 0;
+        track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        track.addEventListener('touchend',   e => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+        });
+
+        goTo(0);
+    }
+
+    /* ── Open modal ── */
+    const open = data => {
+        buildImgCarousel(data.images || [], data.title || '');
+
+        if (modalTitle) modalTitle.textContent = data.title || '';
+        if (modalDesc)  modalDesc.textContent  = data.description || '';
+
+        if (modalTags) {
+            modalTags.innerHTML = (data.tags || [])
+                .map(t => `<span class="tag">${t}</span>`)
+                .join('');
+        }
+
+        if (modalRole) {
+            modalRole.textContent = data.role || '';
+            modalRole.hidden = !data.role;
+        }
+
+        if (modalLink) {
+            modalLink.href   = data.link || '#';
+            modalLink.hidden = !data.link;
+        }
 
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
-        closeBtn && closeBtn.focus();
+        if (closeBtn) closeBtn.focus();
     };
 
     const close = () => {
@@ -252,17 +347,12 @@
         document.body.style.overflow = '';
     };
 
-    // Trigger open from cards
+    // Bind cards
     document.querySelectorAll('[data-modal]').forEach(card => {
         card.addEventListener('click', e => {
-            // Don't open if clicking a button/link inside the overlay
             if (e.target.closest('a, button') && !e.target.closest('[data-modal]')) return;
-            try {
-                const data = JSON.parse(card.getAttribute('data-modal'));
-                open(data);
-            } catch (_) {}
+            try { open(JSON.parse(card.getAttribute('data-modal'))); } catch (_) {}
         });
-        // Keyboard accessibility
         card.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
         });

@@ -28,7 +28,7 @@ $navItems = [
                     <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Twitter / X">
                         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.63 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.94 6.07-6.94zm-1.29 19.4h2.04L6.47 3.24H4.28l13.33 17.31z"/></svg>
                     </a>
-                    <a href="mailto:mohammad@example.com" class="social-icon" title="Email">
+                    <a href="mailto:jamilon.mohammad@gmail.com" class="social-icon" title="Email">
                         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                     </a>
                 </div>
@@ -48,9 +48,9 @@ $navItems = [
             <div class="footer-col">
                 <h4 class="footer-heading">Get In Touch</h4>
                 <ul class="footer-contact">
-                    <li><span>&#128205;</span> City, Country</li>
-                    <li><span>&#128231;</span> <a href="mailto:mohammad@example.com">mohammad@example.com</a></li>
-                    <li><span>&#128222;</span> +1 (555) 000-0000</li>
+                    <li><span>&#128205;</span> Zamboanga City, Philippines</li>
+                    <li><span>&#128231;</span> <a href="mailto:jamilon.mohammad@gmail.com">jamilon.mohammad@gmail.com</a></li>
+                    <li><span>&#128222;</span> +63 9559952920</li>
                 </ul>
             </div>
 
