@@ -4,6 +4,7 @@ $pageTitle = "About";
 include 'includes/header.php';
 include 'includes/navbar.php';
 include 'includes/breadcrumbs.php';
+include 'data/projects.php';
 include 'data/skills.php';
 ?>
 
@@ -28,11 +29,11 @@ include 'data/skills.php';
             <!-- Photo -->
             <div class="about-img-wrap" data-aos="fade-right">
                 <img class="about-img"
-                     src="assets/images/profile.jpg"
+                     src="assets/images/projects/ProfilePic.png"
                      alt="Mohammad — Full-Stack Developer"
                      onerror="this.src='https://placehold.co/480x560/6a0dad/ffffff?text=Mohammad'">
                 <div class="about-img-badge" data-aos="zoom-in" data-aos-delay="300">
-                    <strong>3+</strong>
+                    <strong>2+</strong>
                     Years<br>Experience
                 </div>
             </div>
@@ -57,11 +58,11 @@ include 'data/skills.php';
 
                 <div class="about-info">
                     <div class="info-item"><span>Name</span>Mohammad</div>
-                    <div class="info-item"><span>Location</span>City, Country</div>
-                    <div class="info-item"><span>Email</span>mohammad@example.com</div>
+                    <div class="info-item"><span>Location</span>Zamboanga City, Philippines</div>
+                    <div class="info-item"><span>Email</span>jamilon.mohammad@gmail.com</div>
                     <div class="info-item"><span>Availability</span>Open to work ✅</div>
-                    <div class="info-item"><span>Languages</span>English, Arabic</div>
-                    <div class="info-item"><span>Degree</span>BSc Computer Science</div>
+                    <div class="info-item"><span>Languages</span>English, Filipino</div>
+                    <div class="info-item"><span>Degree</span>BS Information Technology</div>
                 </div>
 
                 <div style="display:flex;gap:1rem;flex-wrap:wrap;">
@@ -115,14 +116,7 @@ include 'data/skills.php';
 <section class="stats-section">
     <div class="container">
         <div class="stats-grid">
-            <?php
-            $stats = [
-                ['label' => 'Projects Completed', 'value' => 24,   'suffix' => '+'],
-                ['label' => 'Happy Clients',      'value' => 18,   'suffix' => '+'],
-                ['label' => 'Years Experience',   'value' => 3,    'suffix' => '+'],
-                ['label' => 'GitHub Commits',     'value' => 1200, 'suffix' => '+'],
-            ];
-            foreach ($stats as $i => $stat): ?>
+            <?php foreach ($stats as $i => $stat): ?>
             <div class="stat-card" data-aos="fade-up" data-aos-delay="<?php echo $i * 80; ?>">
                 <div class="stat-number"
                      data-target="<?php echo $stat['value']; ?>"

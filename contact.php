@@ -63,21 +63,21 @@ include 'includes/breadcrumbs.php';
                     <div class="contact-icon">&#128205;</div>
                     <div class="contact-item-text">
                         <strong>Location</strong>
-                        City, Country
+                        Zamboanga City, Philippines
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="contact-icon">&#128231;</div>
                     <div class="contact-item-text">
                         <strong>Email</strong>
-                        <a href="mailto:mohammad@example.com">mohammad@example.com</a>
+                        <a href="mailto:jamilon.mohammad@gmail.com">jamilon.mohammad@gmail.com</a>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="contact-icon">&#128222;</div>
                     <div class="contact-item-text">
                         <strong>Phone</strong>
-                        +1 (555) 000-0000
+                        +63 9559952920
                     </div>
                 </div>
                 <div class="contact-item">
