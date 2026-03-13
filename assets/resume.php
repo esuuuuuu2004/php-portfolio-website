@@ -522,7 +522,7 @@
                         <div class="entry-title">Bachelor of Science in Information Technology</div>
                         <span class="entry-date">2022 – Present</span>
                     </div>
-                    <div class="entry-sub">Zamboanga City, Philippines</div>
+                    <div class="entry-sub">Western Mindanao State University,Zamboanga City, Philippines</div>
                     <div class="entry-desc">
                         Focused on web application development, database systems, software engineering principles,
                         and mobile application development.
