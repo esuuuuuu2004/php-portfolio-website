@@ -67,7 +67,7 @@ include 'data/skills.php';
 
                 <div style="display:flex;gap:1rem;flex-wrap:wrap;">
                     <a href="contact.php" class="btn btn-primary">Hire Me</a>
-                    <a href="assets/resume.html" target="_blank" class="btn btn-outline">View / Download CV</a>
+                    <a href="assets/resume.php" target="_blank" class="btn btn-outline">View / Download CV</a>
                 </div>
             </div>
 
